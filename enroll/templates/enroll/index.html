@@ -1,0 +1,69 @@
+{% extends 'enroll/base.html' %}
+{% block content %} 
+ 
+<div class="row">
+    <div class="col-sm-4">
+    <h4 class="text-center alert alert-info">Add New Student</h4>
+
+      <form method="POST" action="">
+      {% csrf_token %} 
+
+        {{ stdRegForm.as_p }}
+      
+        <input type="submit" value="Add Student" class="btn btn-success"> 
+      </form>
+    </div>
+
+    {% comment %} Displaying student information {% endcomment %}
+    
+    <div class="col-sm-7 offset-1">
+        <h4 class="text-center alert alert-info"> Student details </h4>
+
+        {% if students %}
+
+        <table class="table">
+  <thead>
+    <tr>
+      <th scope="col"> ID </th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Password</th>
+      <th scope="col"> Actions </th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for student in students %}
+  <tr>
+      <th scope="row"> {{ student.id }} </th>
+      <td> {{ student.name }} </td>
+      <td> {{ student.email }} </td>
+      <td> {{ student.password }} </td>
+
+      <td> 
+        <a href="{% url 'editrec' student.id %}" class="btn btn-warning btn-sm"> Edit </a> &nbsp; &nbsp;
+        
+        <form action="{% url 'deleterec' student.id  %}" method='POST' class="d-inline">
+         {% csrf_token %}
+        <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+        </form>
+
+      </td>
+      
+    </tr>
+
+  {% endfor %}
+
+  </tbody>
+</table>
+        
+        {% else %}
+            <h5 class="text-center alert alert-danger"> No Data Found </h5>
+        {% endif %}
+
+
+    </div>
+</div>
+
+
+  {% endblock content %}
